@@ -61,12 +61,13 @@ function updatePlayer(dt, $container) {
   GAME_STATE.playerX = clamp(GAME_STATE.playerX, PLAYER_WIDTH, GAME_WIDTH - PLAYER_WIDTH);
 
   if (GAME_STATE.spacePressed && GAME_STATE.playerCooldown <= 0) {
-    createLaser($container, GAME_STATE.playerX, GAME_STATE.playerY);
-    GAME_STATE.playerCooldown = LASER_COOLDOWN;
-  }
-  if (GAME_STATE.playerCooldown > 0) {
-    GAME_STATE.playerCooldown -= dt;
-  }
+     createLaser($container, GAME_STATE.playerX, GAME_STATE.playerY);
+     GAME_STATE.playerCooldown = LASER_COOLDOWN;
+   }
+
+   if(GAME_STATE.playerCooldown > 0) {
+     GAME_STATE.playerCooldown -= dt;
+   }
 
   const $player = document.querySelector(".player");
   setPosition($player, GAME_STATE.playerX, GAME_STATE.playerY);
