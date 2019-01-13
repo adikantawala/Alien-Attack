@@ -90,8 +90,17 @@ function updateLasers(dt, $container) {
   for (let i = 0; i < lasers.length; i++) {
     const laser = lasers[i]
     laser.y -= dt * LASER_MAX_SPEED
+    if (laser.y < 0) {
+      destroyLaser($container, laser);
+    }
     setPosition(laser.$element, laser.x, laser.y);
   }
+  GAME_STATE.lasers = GAME_STATE.lasers.filter(e => !e.isDead);
+}
+
+function destroyLaser($container, laser) {
+  $container.removeChild(laser.$element);
+  laser.isDead = true;
 }
 
 function update(){
