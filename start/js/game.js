@@ -11,6 +11,12 @@ const PLAYER_MAX_SPEED = 600;
 const LASER_MAX_SPEED = 300;
 const LASER_COOLDOWN = 0.5;
 
+const ENEMIES_PER_ROW = 10;
+const ENEMY_HORIZONTAL_PADDING = 80;
+const ENEMY_VERTICAL_PADDING = 70;
+const ENEMY_VERTICAL_SPACING = 80;
+
+
 const GAME_STATE = {
   lastTime: Date.now(),
   leftPressed: false,
@@ -20,6 +26,7 @@ const GAME_STATE = {
   playerY: 0,
   playerCooldown: 0,
   lasers: [],
+  enemies: [],
 };
 
 function clamp(v, min, max) {
@@ -49,6 +56,16 @@ function createPlayer($container) {
 function init() {
   const $container = document.querySelector(".game");
   createPlayer($container);
+
+  const enemySpacing = (GAME_WIDTH - ENEMY_HORIZONTAL_PADDING * 2) /
+    (ENEMIES_PER_ROW - 1);
+  for (let i = 0; i < 3; i++) {
+    const y = ENEMY_VERTICAL_PADDING + i * ENEMY_VERTICAL_SPACING;
+    for (let j = 0; j < ENEMIES_PER_ROW; j++) {
+      const x = j * enemySpacing + ENEMY_HORIZONTAL_PADDING;
+      createEnemy($container, x, y);
+    }
+  }
 }
 
 function updatePlayer(dt, $container) {
@@ -82,6 +99,20 @@ function createLaser($container, x, y) {
   GAME_STATE.lasers.push(laser);
   const audio = new Audio("sound/sfx-laser1.ogg");
   audio.play();
+  setPosition($element, x, y);
+}
+
+function createEnemy($container, x, y) {
+  const $element = document.createElement("img");
+  $element.src = "img/enemy-blue-1.png";
+  $element.className = "enemy";
+  $container.appendChild($element);
+  const enemy = {
+    x,
+    y,
+    $element
+  };
+  GAME_STATE.enemies.push(enemy);
   setPosition($element, x, y);
 }
 
