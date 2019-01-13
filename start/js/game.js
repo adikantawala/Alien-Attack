@@ -29,6 +29,15 @@ const GAME_STATE = {
   enemies: [],
 };
 
+function rectsIntersect(r1, r2) {
+  return !(
+    r2.left > r1.right ||
+    r2.right < r1.left ||
+    r2.top > r1.bottom ||
+    r2.bottom < r1.top
+  );
+}
+
 function clamp(v, min, max) {
   if (v < min) {
     return min;
@@ -125,6 +134,18 @@ function updateLasers(dt, $container) {
       destroyLaser($container, laser);
     }
     setPosition(laser.$element, laser.x, laser.y);
+    const r1 = laser.$element.getBoundingClientRect();
+    const enemies = GAME_STATE.enemies;
+    for (let j = 0; j < enemies.length; j++) {
+      const enemy = enemies[j];
+      if (enemy.isDead) continue;
+      const r2 = enemy.$element.getBoundingClientRect();
+      if (rectsIntersect(r1, r2)){
+        destroyEnemy($container, enemy);
+        destroyLaser($container, laser);
+        break;
+      }
+    }
   }
   GAME_STATE.lasers = GAME_STATE.lasers.filter(e => !e.isDead);
 }
@@ -140,11 +161,16 @@ function updateEnemies(dt, $container){
     const y = enemy.y + dy;
     setPosition(enemy.$element, x, y)
   }
+  GAME_STATE.enemies = GAME_STATE.enemies.filter(e => !e.isDead);
 }
 
 function destroyLaser($container, laser) {
   $container.removeChild(laser.$element);
   laser.isDead = true;
+}
+function destroyEnemy($container, enemy) {
+  $container.removeChild(enemy.$element);
+  enemy.isDead = true;
 }
 
 function update(){
