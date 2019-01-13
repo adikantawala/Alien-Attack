@@ -129,6 +129,19 @@ function updateLasers(dt, $container) {
   GAME_STATE.lasers = GAME_STATE.lasers.filter(e => !e.isDead);
 }
 
+function updateEnemies(dt, $container){
+  const dx = Math.sin(GAME_STATE.lastTime / 1000.0) * 50;
+  const dy = Math.cos(GAME_STATE.lastTime / 1000.0) * 10;
+
+  const enemies = GAME_STATE.enemies;
+  for (let i = 0; i < enemies.length; i++) {
+    const enemy = enemies[i];
+    const x = enemy.x + dx;
+    const y = enemy.y + dy;
+    setPosition(enemy.$element, x, y)
+  }
+}
+
 function destroyLaser($container, laser) {
   $container.removeChild(laser.$element);
   laser.isDead = true;
@@ -141,7 +154,7 @@ function update(){
   const $container = document.querySelector(".game");
   updatePlayer(dt, $container);
   updateLasers(dt, $container);
-
+  updateEnemies(dt, $container);
   GAME_STATE.lastTime = currentTime;
   window.requestAnimationFrame(update)
 }
