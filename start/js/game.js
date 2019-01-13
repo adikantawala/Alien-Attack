@@ -9,6 +9,7 @@ const GAME_HEIGHT = 600;
 const PLAYER_WIDTH = 20;
 const PLAYER_MAX_SPEED = 600;
 const LASER_MAX_SPEED = 300;
+const LASER_COOLDOWN = 0.5;
 
 const GAME_STATE = {
   lastTime: Date.now(),
@@ -17,6 +18,7 @@ const GAME_STATE = {
   spacePressed: false,
   playerX: 0,
   playerY: 0,
+  playerCooldown: 0,
   lasers: [],
 };
 
@@ -58,9 +60,13 @@ function updatePlayer(dt, $container) {
   }
   GAME_STATE.playerX = clamp(GAME_STATE.playerX, PLAYER_WIDTH, GAME_WIDTH - PLAYER_WIDTH);
 
-  if (GAME_STATE.spacePressed ) {
-     createLaser($container, GAME_STATE.playerX, GAME_STATE.playerY);
-   }
+  if (GAME_STATE.spacePressed && GAME_STATE.playerCooldown <= 0) {
+    createLaser($container, GAME_STATE.playerX, GAME_STATE.playerY);
+    GAME_STATE.playerCooldown = LASER_COOLDOWN;
+  }
+  if (GAME_STATE.playerCooldown > 0) {
+    GAME_STATE.playerCooldown -= dt;
+  }
 
   const $player = document.querySelector(".player");
   setPosition($player, GAME_STATE.playerX, GAME_STATE.playerY);
