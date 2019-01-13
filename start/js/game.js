@@ -111,12 +111,10 @@ function onKeyDown(e){
 }
 function onKeyUp(e){
   if (e.keyCode === KEY_CODE_LEFT){
-    console.log("left")
     GAME_STATE.leftPressed = false;
   }else if (e.keyCode === KEY_CODE_RIGHT){
     GAME_STATE.rightPressed = false;
   } else if (e.keyCode === KEY_CODE_SPACE) {
-    console.log("space")
     GAME_STATE.spacePressed = false;
   }
 }
