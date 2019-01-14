@@ -53,6 +53,12 @@ function setPosition($el, x, y) {
   $el.style.transform = `translate(${x}px, ${y}px)`;
 }
 
+function rand(min, max){
+  if (min === undefined) min = 0;
+  if (max === undefined) max = 1;
+  return min + Math.random() * (max - min)
+}
+
 function createPlayer($container) {
   GAME_STATE.playerX = GAME_WIDTH / 2;
   GAME_STATE.playerY = GAME_HEIGHT - 50;
@@ -120,7 +126,7 @@ function createEnemy($container, x, y) {
   const enemy = {
     x,
     y,
-    cooldown: ENEMY_COOLDOWN,
+    cooldown: rand(0.5, ENEMY_COOLDOWN),
     $element
   };
   GAME_STATE.enemies.push(enemy);
