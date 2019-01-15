@@ -135,7 +135,7 @@ function createEnemy($container, x, y) {
     cooldown: rand(0.5, ENEMY_COOLDOWN),
     $element
   };
-  // enemy.cooldown = rand(0.5, ENEMY_COOLDOWN)
+
   console.log(enemy.cooldown)
 
   GAME_STATE.enemies.push(enemy);
