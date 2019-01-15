@@ -30,7 +30,6 @@ const GAME_STATE = {
   enemyLasers: [],
   gameOver: false,
   ready:false
-
 };
 
 function rectsIntersect(r1, r2) {
