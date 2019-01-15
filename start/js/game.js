@@ -15,7 +15,7 @@ const ENEMIES_PER_ROW = 10;
 const ENEMY_HORIZONTAL_PADDING = 80;
 const ENEMY_VERTICAL_PADDING = 70;
 const ENEMY_VERTICAL_SPACING = 80;
-const ENEMY_COOLDOWN = 2.8;
+let ENEMY_COOLDOWN = 180.0;
 
 const GAME_STATE = {
   lastTime: Date.now(),
@@ -29,6 +29,7 @@ const GAME_STATE = {
   enemies: [],
   enemyLasers: [],
   gameOver: false,
+  ready:false
 
 };
 
@@ -127,12 +128,16 @@ function createEnemy($container, x, y) {
   $element.src = "img/shipYellow_manned.png";
   $element.className = "enemy";
   $container.appendChild($element);
+
   const enemy = {
     x,
     y,
     cooldown: rand(0.5, ENEMY_COOLDOWN),
     $element
   };
+  // enemy.cooldown = rand(0.5, ENEMY_COOLDOWN)
+  console.log(enemy.cooldown)
+
   GAME_STATE.enemies.push(enemy);
   setPosition($element, x, y);
 }
@@ -185,8 +190,7 @@ function updateEnemyLasers(dt, $container) {
 function destroyPlayer($container, player) {
   $container.removeChild(player);
   GAME_STATE.gameOver = true;
-  const audio = new Audio("sound/sfx-lose.ogg");
-  audio.play();
+
 }
 
 function updateEnemies(dt, $container){
@@ -202,7 +206,7 @@ function updateEnemies(dt, $container){
     enemy.cooldown -= dt;
     if (enemy.cooldown <= 0) {
       createEnemyLaser($container, x, y);
-      enemy.cooldown = ENEMY_COOLDOWN;
+      enemy.cooldown = rand(0.5, ENEMY_COOLDOWN);
     }
   }
   GAME_STATE.enemies = GAME_STATE.enemies.filter(e => !e.isDead);
@@ -230,23 +234,42 @@ function destroyEnemy($container, enemy) {
 function update(){
   const currentTime = Date.now();
   const dt = (currentTime - GAME_STATE.lastTime) / 1000
+  if (!GAME_STATE.ready){
+
+    let startBlock = document.querySelector(".start");
+    startBlock.style.display = "block"
+    let startButton = document.querySelector("#strbtn")
+    startButton.addEventListener("click", ()=> {
+      startBlock.style.display = "none";
+      GAME_STATE.ready = true;
+      ENEMY_COOLDOWN -= 174
+      start()
+      update()
+
+    })
+  }
   if (GAME_STATE.gameOver) {
+    GAME_STATE.ready = false;
     document.querySelector(".game-over").style.display = "block";
     return;
   }
 
-  if (playerHasWon()) {
+  if (playerHasWon() && GAME_STATE.ready === true) {
     document.querySelector(".congratulations").style.display = "block";
     return;
   }
 
-  const $container = document.querySelector(".game");
-  updatePlayer(dt, $container);
-  updateLasers(dt, $container);
-  updateEnemies(dt, $container);
-  updateEnemyLasers(dt, $container);
-  GAME_STATE.lastTime = currentTime;
-  window.requestAnimationFrame(update)
+  if (GAME_STATE.ready){
+
+    const $container = document.querySelector(".game");
+    updatePlayer(dt, $container);
+    updateLasers(dt, $container);
+    updateEnemies(dt, $container);
+    updateEnemyLasers(dt, $container);
+    GAME_STATE.lastTime = currentTime;
+    window.requestAnimationFrame(update)
+  }
+
 }
 
 function onKeyDown(e){
@@ -268,8 +291,9 @@ function onKeyUp(e){
     GAME_STATE.spacePressed = false;
   }
 }
-
-init();
+function start(){
+  init();
+}
 
 window.addEventListener("keydown", onKeyDown)
 window.addEventListener("keyup", onKeyUp)
