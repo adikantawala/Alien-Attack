@@ -37,6 +37,7 @@ footer {
   align-items: center;
   background: #222;
 }
+
 .game {
   width: 800px;
   height: 600px;
@@ -78,6 +79,17 @@ footer {
   position: absolute;
   margin-left: -2.5px;
   height: 30px;
+}
+.start {
+  display: none;
+  position: absolute;
+  background: #c7a526;
+  color: white;
+  padding: 20px 50px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  text-align: center;
+  animation: pop-in 1s;
 }
 
 .congratulations {
