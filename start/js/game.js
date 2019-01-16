@@ -244,7 +244,7 @@ function update(){
       GAME_STATE.ready = true;
       ENEMY_COOLDOWN -= 174
       start()
-      setTimeout(()=> update(),1000)
+      setTimeout(()=> update(),500)
 
 
     })
