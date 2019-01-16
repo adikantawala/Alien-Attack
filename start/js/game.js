@@ -30,6 +30,7 @@ const GAME_STATE = {
   enemyLasers: [],
   gameOver: false,
   ready:false
+
 };
 
 function rectsIntersect(r1, r2) {
@@ -243,11 +244,11 @@ function update(){
       GAME_STATE.ready = true;
       ENEMY_COOLDOWN -= 174
       start()
-      update()
+      setTimeout(()=> update(),1000)
+
 
     })
-  }
-  if (GAME_STATE.gameOver) {
+  }else {  if (GAME_STATE.gameOver) {
     GAME_STATE.ready = false;
     document.querySelector(".game-over").style.display = "block";
     return;
@@ -267,7 +268,7 @@ function update(){
     updateEnemyLasers(dt, $container);
     GAME_STATE.lastTime = currentTime;
     window.requestAnimationFrame(update)
-  }
+  }}
 
 }
 
@@ -291,7 +292,8 @@ function onKeyUp(e){
   }
 }
 function start(){
-  init();
+  setTimeout(() => init(), 0)
+
 }
 
 window.addEventListener("keydown", onKeyDown)
