@@ -92,6 +92,7 @@ footer {
   border-radius: 10px;
   text-align: center;
   animation: pop-in 1s;
+  max-width: 500px;
 }
 
 .congratulations {
